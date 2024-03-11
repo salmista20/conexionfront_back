@@ -1,12 +1,24 @@
-const API_URL = 'http://jsonplaceholder.typicode.com/';
-const HTMLResponse = document.querySelector("#app");
-const template;
+const API_URL = "https://jsonplaceholder.typicode.com";
 
-fetch('${API_URL}/users') 
-.then((response) =>response.json())
-.then((users) =>{
-    const tpl = users.map(user => '<li></li>')
-});
+const xhr = new XMLHttpRequest();
 
+function onRequestHandler() { 
+        if(this.readyState=4 && this.status=200);{ 
+        //0 = UNSET, no se ha llamado al metodo open
+        //1 = OPENED, se ha llamado al metodo open.
+        //2 = HEADERS_RECEIVED, se esta llamando al metodo send()
+        //3 = LOADING esta cargando,es decir esta recibiendo la respuesta.
+        //4 = DONE, se ha completado la operacion.
+        const data =JSON.parse(this.response);
+        const HTMLResponse = document.querySelector("#app");
+
+        const tpl = data.map(user=>'<li>${user.name} ✉${user.email}</li>');
+        HTMLResponse.innerHTML = '<ul>${tpl}</ul>'
+    }
+}
+
+xhr.addEventListener('load',onRequestHandler);
+xhr.open('GET', '${ API_URL}/users');
+xhr.send();
 
 
